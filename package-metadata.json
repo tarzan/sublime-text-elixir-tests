@@ -1,7 +1,7 @@
 {
-  "url": "https://github.com/maltize/sublime-text-2-ruby-tests",
+  "url": "https://github.com/tarzan/sublime-text-elixir-tests",
   "version": "1.0.0",
-  "description": "Sublime Text 2 plugin for running ruby tests! (Unit, RSpec, Cucumber)",
-  "author": "Maciej Gajek & Grzegorz Smajdor",
-  "homepage": "https://github.com/maltize/sublime-text-2-ruby-tests"
+  "description": "Sublime Text plugin for running Elixir tests! (mix)",
+  "author": "Maarten Jacobs",
+  "homepage": "https://github.com/tarzan/sublime-text-elixir-tests"
 }

@@ -3,19 +3,19 @@
     "id":"tools",
     "children":[
       {
-        "caption":"RubyTest",
+        "caption":"ElixirTest",
         "children":[
           {
             "caption":"Run single test / scenario / spec",
-            "command":"run_single_ruby_test"
+            "command":"run_single_elixir_test"
           },
           {
             "caption":"Run all tests / feature / full spec",
-            "command":"run_all_ruby_test"
+            "command":"run_all_elixir_test"
           },
           {
             "caption":"Run last tests / feature / spec",
-            "command":"run_last_ruby_test"
+            "command":"run_last_elixir_test"
           },
           {
             "caption":"-"
@@ -26,10 +26,6 @@
           },
           {
             "caption":"-"
-          },
-          {
-            "caption":"Verify ruby syntax",
-            "command":"verify_ruby_file"
           },
           {
             "caption":"Switch Between Code and Test",
@@ -56,19 +52,19 @@
         "id":"package-settings",
         "children":[
           {
-            "caption":"RubyTest",
+            "caption":"elixirTest",
             "children":[
               {
                 "command":"open_file",
                 "args":{
-                  "file":"${packages}/RubyTest/RubyTest.sublime-settings"
+                  "file":"${packages}/elixirTest/elixirTest.sublime-settings"
                 },
                 "caption":"Settings – Default"
               },
               {
                 "command":"open_file",
                 "args":{
-                  "file":"${packages}/User/RubyTest.sublime-settings"
+                  "file":"${packages}/User/elixirTest.sublime-settings"
                 },
                 "caption":"Settings – User"
               },
@@ -78,14 +74,14 @@
               {
                 "command":"open_file",
                 "args":{
-                  "file":"${packages}/RubyTest/Default.sublime-keymap"
+                  "file":"${packages}/elixirTest/Default.sublime-keymap"
                 },
                 "caption":"Key Bindings – Default"
               },
               {
                 "command":"open_file",
                 "args":{
-                  "file":"${packages}/RubyTest/Default (Windows).sublime-keymap",
+                  "file":"${packages}/elixirTest/Default (Windows).sublime-keymap",
                   "platform":"Windows"
                 },
                 "caption":"Key Bindings – User"
@@ -93,7 +89,7 @@
               {
                 "command":"open_file",
                 "args":{
-                  "file":"${packages}/RubyTest/Default (OSX).sublime-keymap",
+                  "file":"${packages}/elixirTest/Default (OSX).sublime-keymap",
                   "platform":"OSX"
                 },
                 "caption":"Key Bindings – User"
@@ -101,7 +97,7 @@
               {
                 "command":"open_file",
                 "args":{
-                  "file":"${packages}/RubyTest/Default (Linux).sublime-keymap",
+                  "file":"${packages}/elixirTest/Default (Linux).sublime-keymap",
                   "platform":"Linux"
                 },
                 "caption":"Key Bindings – User"
