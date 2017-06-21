@@ -60,6 +60,7 @@ class ShowInScratch:
       self.append(content)
     self.poll_copy()
 
+
 class ShowPanels:
   def __init__(self, window):
     self.window = window
@@ -72,42 +73,10 @@ class ShowPanels:
                       })
     self.window.focus_group(1)
 
-class TestMethodMatcher(object):
+
+class ElixirTestSettings:
   def __init__(self):
-    self.matchers = [TestMethodMatcher.UnitTest, TestMethodMatcher.ShouldaTest]
-  def find_first_match_in(self, test_file_content):
-    for matcher in self.matchers:
-      test_name = matcher.find_first_match(test_file_content)
-      if test_name:
-        return test_name
-
-  class UnitTest(object):
-    @staticmethod
-    def find_first_match(test_file_content):
-      match_obj = re.search('\s?([a-zA-Z_\d]+tset)\s+fed', test_file_content) # 1st search for 'def test_name'
-      if match_obj:
-        return match_obj.group(1)[::-1]
-
-      match_obj = re.search('\s?[\"\']([a-zA-Z_\"\'\s\d\-\.#=?!:\/]+)[\"\']\s+tset', test_file_content) # 2nd search for 'test "name"'
-      if match_obj:
-        test_name = match_obj.group(1)[::-1]
-        return "test_%s" % test_name.replace("\"", "\\\"").replace(" ", "_").replace("'", "\\'")
-
-      return None
-
-  class ShouldaTest(object):
-    @staticmethod
-    def find_first_match(test_file_content):
-      match_obj = re.search('\s?(([\"][^\"]*[\"]|[\'][^\']*[\'])\s+dluohs)', test_file_content) # search for 'should "name"'
-      if not match_obj:
-        return None
-      test_name = match_obj.group(1)[::-1]
-      return "%s%s%s" % ("/", test_name.replace("should", "").replace("\"", "").replace("'", "").strip(), "/")
-
-
-class RubyTestSettings:
-  def __init__(self):
-    self.settings = sublime.load_settings("RubyTest.sublime-settings")
+    self.settings = sublime.load_settings("ElixirTest.sublime-settings")
 
   def __getattr__(self, name):
     if not self.settings.has(name):
@@ -118,13 +87,10 @@ class RubyTestSettings:
     return lambda **kwargs: self.settings.get(name).format(**kwargs)
 
 
-class BaseRubyTask(sublime_plugin.TextCommand):
+class BaseMixTask(sublime_plugin.TextCommand):
   def load_config(self):
-    s = sublime.load_settings("RubyTest.sublime-settings")
-    global RUBY_UNIT_FOLDER; RUBY_UNIT_FOLDER = s.get("ruby_unit_folder")
-    global CUCUMBER_UNIT_FOLDER; CUCUMBER_UNIT_FOLDER = s.get("ruby_cucumber_folder")
-    global RSPEC_UNIT_FOLDER; RSPEC_UNIT_FOLDER = s.get("ruby_rspec_folder")
-    global USE_SCRATCH; USE_SCRATCH = s.get("ruby_use_scratch")
+    s = sublime.load_settings("ElixirTest.sublime-settings")
+    global MIX_TEST_FOLDER; MIX_TEST_FOLDER = s.get("mix_test_folder")
     global IGNORED_DIRECTORIES; IGNORED_DIRECTORIES = s.get("ignored_directories")
     global HIDE_PANEL; HIDE_PANEL = s.get("hide_panel")
     global BEFORE_CALLBACK; BEFORE_CALLBACK = s.get("before_callback")
@@ -136,47 +102,7 @@ class BaseRubyTask(sublime_plugin.TextCommand):
     global TERMINAL_ENCODING; TERMINAL_ENCODING = s.get('terminal_encoding')
 
 
-    rbenv   = s.get("check_for_rbenv")
-    rvm     = s.get("check_for_rvm")
-    bundler = s.get("check_for_bundler")
-    spring  = s.get("check_for_spring")
-    if rbenv or rvm: self.rbenv_or_rvm(s, rbenv, rvm)
-    if spring: self.spring_support()
-    if bundler: self.bundler_support()
-
-  def spring_support(self):
-    global COMMAND_PREFIX
-    COMMAND_PREFIX = COMMAND_PREFIX + " spring "
-
-  def rbenv_or_rvm(self, s, rbenv, rvm):
-    which = os.popen('which rbenv').read().split('\n')[0]
-    brew = '/usr/local/bin/rbenv'
-    rbenv_cmd = os.path.expanduser('~/.rbenv/bin/rbenv')
-    rvm_cmd = os.path.expanduser('~/.rvm/bin/rvm-auto-ruby')
-
-    if os.path.isfile(brew): rbenv_cmd = brew
-    elif os.path.isfile(which): rbenv_cmd = which
-
-    global COMMAND_PREFIX
-    if rbenv and self.is_executable(rbenv_cmd):
-      COMMAND_PREFIX = rbenv_cmd + ' exec'
-    elif rvm and self.is_executable(rvm_cmd):
-      COMMAND_PREFIX = rvm_cmd + ' -S'
-
-  def bundler_support(self):
-    project_root = self.file_type(None, False).find_project_root()
-    if not os.path.isdir(project_root):
-      s = sublime.load_settings("RubyTest.last-run")
-      project_root = s.get("last_test_working_dir")
-
-    gemfile_path = project_root + '/Gemfile'
-
-    global COMMAND_PREFIX
-    if not COMMAND_PREFIX:
-      COMMAND_PREFIX = ""
-
-    if os.path.isfile(gemfile_path):
-      COMMAND_PREFIX =  COMMAND_PREFIX + " bundle exec "
+    mix   = s.get("check_for_mix") #does nothing yet
 
   def save_all(self):
     if SAVE_ON_RUN:
@@ -186,11 +112,11 @@ class BaseRubyTask(sublime_plugin.TextCommand):
     return os.path.isfile(path) and os.access(path, os.X_OK)
 
   def save_test_run(self, command, working_dir):
-    s = sublime.load_settings("RubyTest.last-run")
+    s = sublime.load_settings("ElixirTest.last-run")
     s.set("last_test_run", command)
     s.set("last_test_working_dir", working_dir)
 
-    sublime.save_settings("RubyTest.last-run")
+    sublime.save_settings("ElixirTest.last-run")
 
   def run_shell_command(self, command, working_dir):
     if not command:
@@ -208,7 +134,7 @@ class BaseRubyTask(sublime_plugin.TextCommand):
       "cmd": command,
       "shell": True,
       "working_dir": working_dir,
-      "file_regex": r"([^ ]*\.rb):?(\d*)",
+      "file_regex": r"([^ ]*\.ex?):?(\d*)",
       "encoding": TERMINAL_ENCODING
     })
     self.display_results()
@@ -229,7 +155,6 @@ class BaseRubyTask(sublime_plugin.TextCommand):
     def parent_dir_name(self):
       head_dir, tail_dir = os.path.split(self.folder_name)
       return tail_dir
-    def verify_syntax_command(self): return None
     def possible_alternate_files(self): return []
     def run_all_tests_command(self): return None
     def get_project_root(self): return self.folder_name
@@ -250,55 +175,16 @@ class BaseRubyTask(sublime_plugin.TextCommand):
     def __init__(self):
       True
 
-  class RubyFile(BaseFile):
-    def verify_syntax_command(self): return RubyTestSettings().ruby_verify_command(file_name=self.file_name)
-    def possible_alternate_files(self): return [self.file_name.replace(".rb", "_spec.rb"), self.file_name.replace(".rb", "_test.rb"), "test_" + self.file_name, self.file_name.replace(".rb", ".feature")]
-    def features(self): return ["verify_syntax", "switch_to_test", "rails_generate", "extract_variable"]
-
-  class UnitFile(RubyFile):
-    def possible_alternate_files(self): return [self.file_name.replace("_test.rb", ".rb").replace("test_", "")]
-    def run_all_tests_command(self): return RubyTestSettings().run_ruby_unit_command(relative_path=self.relative_file_path())
-    def run_single_test_command(self, view):
-      region = view.sel()[0]
-      line_region = view.line(region)
-      text_string = view.substr(sublime.Region(region.begin() - 2000, line_region.end()))
-      text_string = text_string.replace("\n", "\\N")
-      text_string = text_string[::-1]
-      test_name = TestMethodMatcher().find_first_match_in(text_string)
-      if test_name is None:
-        sublime.error_message("No test name!")
-        return None
-      return RubyTestSettings().run_single_ruby_unit_command(relative_path=self.relative_file_path(), test_name=test_name, line_number=self.get_current_line_number(view))
-    def features(self): return super(BaseRubyTask.UnitFile, self).features() + ["run_test"]
-    def get_project_root(self): return self.find_project_root()
-
-  class CucumberFile(BaseFile):
-    def possible_alternate_files(self): return list( set( [self.file_name.replace(".feature", ".rb"), self.file_name.replace(".feature", "_steps.rb")] ) )
-    def run_all_tests_command(self): return RubyTestSettings().run_cucumber_command(relative_path=self.relative_file_path())
-    def run_single_test_command(self, view): return RubyTestSettings().run_single_cucumber_command(relative_path=self.relative_file_path(), line_number=self.get_current_line_number(view))
-    def features(self): return ["switch_to_test", "run_test"]
-    def get_project_root(self): return self.find_project_root()
-
-  class RSpecFile(RubyFile):
-    def possible_alternate_files(self): return list( set( [self.file_name.replace("_spec.rb", ".rb"), self.file_name.replace(".haml_spec.rb", ".haml"), self.file_name.replace(".erb_spec.rb", ".erb")] ) - set([self.file_name]) )
-    def run_all_tests_command(self): return RubyTestSettings().run_rspec_command(relative_path=self.relative_file_path())
-    def run_single_test_command(self, view): return RubyTestSettings().run_single_rspec_command(relative_path=self.relative_file_path(), line_number=self.get_current_line_number(view))
-    def features(self): return super(BaseRubyTask.RSpecFile, self).features() + ["run_test"]
-    def get_project_root(self): return self.find_project_root()
-
-  class ErbFile(BaseFile):
-    def verify_syntax_command(self): return RubyTestSettings().erb_verify_command(file_name=self.file_name)
-    def can_verify_syntax(self): return True
-    def possible_alternate_files(self): return [self.file_name.replace(".erb", ".erb_spec.rb")]
-    def features(self): return ["verify_syntax", "switch_to_test"]
-
-  class HamlFile(BaseFile):
-    def possible_alternate_files(self): return [self.file_name.replace(".haml", ".haml_spec.rb")]
+  class ElixirFile(BaseFile):
+    def possible_alternate_files(self): return [self.file_name.replace(".ex", "_test.exs"), self.file_name.replace(".exs", "_test.exs"), "test_" + self.file_name]
     def features(self): return ["switch_to_test"]
 
-  class CucumberStepsFile(BaseFile):
-    def possible_alternate_files(self): return [self.file_name.replace("_steps.rb", ".feature")]
-    def features(self): return ["switch_to_test"]
+  class TestFile(ElixirFile):
+    def possible_alternate_files(self): return list( set( [self.file_name.replace("_test.exs", ".ex"), self.file_name.replace("_test.exs", ".exs")] ) - set([self.file_name]) )
+    def run_all_tests_command(self): return ElixirTestSettings().run_mix_command(relative_path=self.relative_file_path())
+    def run_single_test_command(self, view): return ElixirTestSettings().run_single_mix_command(relative_path=self.relative_file_path(), line_number=self.get_current_line_number(view))
+    def features(self): return super(BaseMixTask.TestFile, self).features() + ["run_test"]
+    def get_project_root(self): return self.find_project_root()
 
   def find_partition_folder(self, file_name, default_partition_folder):
     folders = self.view.window().folders()
@@ -313,32 +199,17 @@ class BaseRubyTask(sublime_plugin.TextCommand):
     if load_config:
       self.load_config()
     file_name = file_name or self.view.file_name()
-    if not file_name: return BaseRubyTask.AnonymousFile()
-    if re.search('\w+\_test.rb', file_name):
-      partition_folder = self.find_partition_folder(file_name, RUBY_UNIT_FOLDER)
-      return BaseRubyTask.UnitFile(file_name, partition_folder)
-    elif re.search('test\_\w+\.rb', file_name):
-      partition_folder = self.find_partition_folder(file_name, RUBY_UNIT_FOLDER)
-      return BaseRubyTask.UnitFile(file_name, partition_folder)
-    elif re.search('\w+\_spec.rb', file_name):
-      partition_folder = self.find_partition_folder(file_name, RSPEC_UNIT_FOLDER)
-      return BaseRubyTask.RSpecFile(file_name, partition_folder)
-    elif re.search('\w+\.feature', file_name):
-      partition_folder = self.find_partition_folder(file_name, CUCUMBER_UNIT_FOLDER)
-      return BaseRubyTask.CucumberFile(file_name, partition_folder)
-    elif re.search('\w+\_steps.rb', file_name):
-      return BaseRubyTask.CucumberStepsFile(file_name)
-    elif re.search('\w+\.rb', file_name):
-      return BaseRubyTask.RubyFile(file_name)
-    elif re.search('\w+\.erb', file_name):
-      return BaseRubyTask.ErbFile(file_name)
-    elif re.search('\w+\.haml', file_name):
-      return BaseRubyTask.HamlFile(file_name)
+    if not file_name: return BaseMixTask.AnonymousFile()
+    if re.search('\w+\_test.exs', file_name):
+      partition_folder = self.find_partition_folder(file_name, MIX_TEST_FOLDER)
+      return BaseMixTask.TestFile(file_name, partition_folder)
+    elif re.search('\w+\.ex?', file_name):
+      return BaseMixTask.ElixirFile(file_name)
     else:
-      return BaseRubyTask.BaseFile(file_name)
+      return BaseMixTask.BaseFile(file_name)
 
 
-class RunSingleRubyTest(BaseRubyTask):
+class RunSingleElixirTest(BaseMixTask):
   def is_enabled(self): return 'run_test' in self.file_type().features()
   def run(self, args):
     self.load_config()
@@ -348,7 +219,7 @@ class RunSingleRubyTest(BaseRubyTask):
     self.run_shell_command(command, file.get_project_root())
 
 
-class RunAllRubyTest(BaseRubyTask):
+class RunAllElixirTest(BaseMixTask):
   def is_enabled(self): return 'run_test' in self.file_type().features()
   def run(self, args):
     self.load_config()
@@ -358,32 +229,22 @@ class RunAllRubyTest(BaseRubyTask):
     if self.run_shell_command(command, file.get_project_root()):
       pass
     else:
-      sublime.error_message("Only *_test.rb, test_*.rb, *_spec.rb, *.feature files supported!")
+      sublime.error_message("Only *.exs files supported!")
 
 
-class RunLastRubyTest(BaseRubyTask):
+class RunLastElixirTest(BaseMixTask):
   def load_last_run(self):
     self.load_config()
     self.save_all()
-    s = sublime.load_settings("RubyTest.last-run")
+    s = sublime.load_settings("ElixirTest.last-run")
     return (s.get("last_test_run"), s.get("last_test_working_dir"))
 
   def run(self, args):
     last_command, working_dir = self.load_last_run()
     self.run_shell_command(last_command, working_dir)
 
-class VerifyRubyFile(BaseRubyTask):
-  def is_enabled(self): return 'verify_syntax' in self.file_type().features()
-  def run(self, args):
-    self.load_config()
-    file = self.file_type()
-    command = file.verify_syntax_command()
-    if self.run_shell_command(command, file.get_project_root()):
-      pass
-    else:
-      sublime.error_message("Only .rb or .erb files supported!")
 
-class SwitchBetweenCodeAndTest(BaseRubyTask):
+class SwitchBetweenCodeAndTest(BaseMixTask):
   def is_enabled(self): return 'switch_to_test' in self.file_type().features()
   def run(self, args, split_view):
     self.load_config()
@@ -422,36 +283,10 @@ class SwitchBetweenCodeAndTest(BaseRubyTask):
     return [os.path.join(dirname, file) for directory in directories for dirname, _, files in self.walk(directory) for file in filter(file_matcher, files)]
 
 
-class RubyRailsGenerate(BaseRubyTask):
-  def is_enabled(self): return 'rails_generate' in self.file_type().features()
-
-  def run(self, args, type = "migration"):
-    self.window().show_input_panel("rails generate", type + " ", lambda s: self.generate(s), None, None)
-
-  def generate(self, argument):
-    command = 'rails generate {thing}'.format(thing=argument)
-    self.run_shell_command(command, self.window().folders()[0])
-
-class ShowTestPanel(BaseRubyTask):
+class ShowTestPanel(BaseMixTask):
   def run(self, args):
     self.window().run_command("show_panel", {"panel": "output.exec"})
 
-class RubyExtractVariable(BaseRubyTask):
-  def is_enabled(self): return 'extract_variable' in self.file_type().features()
-  def run(self, args):
-    for selection in self.view.sel():
-      self.window().show_input_panel("Variable Name: ", '', lambda name: self.generate(selection, name), None, None)
-
-  def generate(self, selection, name):
-    extracted = self.view.substr(selection)
-    line = self.view.line(selection)
-    white_space = re.match("\s*", self.view.substr(line)).group()
-    edit = self.view.begin_edit()
-    try:
-      self.view.replace(edit, selection, name)
-      self.view.insert(edit, line.begin(), white_space + name + " = " + extracted + "\n")
-    finally:
-      self.view.end_edit(edit)
 
 class GenerateTestFile:
   relative_paths = []
@@ -494,12 +329,12 @@ class GenerateTestFile:
 
   def is_valid_path(self, path):
     if re.search(self.test_path_re(), self.current_file()):
-      return re.search('app(\/|\\\)|(lib|extras)$', path) and not re.search('assets|views|vendor', path)
+      return re.search('lib(\/|\\\)|(lib|extras)$', path) and not re.search('assets|views|vendor', path)
     else:
       return re.search(self.test_path_re(), path)
 
   def test_path_re(self):
-    return RUBY_UNIT_FOLDER + '|' + RSPEC_UNIT_FOLDER + '|' + CUCUMBER_UNIT_FOLDER
+    return MIX_TEST_FOLDER
 
   def current_file(self):
     return self.window.active_view().file_name()
@@ -516,17 +351,13 @@ class GenerateTestFile:
 
   def set_file_name(self, path, current_file):
     if re.search(self.test_path_re(), self.current_file()):
-      return re.sub('_test.rb|_spec.rb|.feature', '.rb', current_file)
+      return re.sub('_test.exs', '.ex', current_file)
     else:
-      return current_file.replace('.rb', self.detect_test_type(path))
+      return current_file.replace('.ex', self.detect_test_type(path))
 
   def detect_test_type(self, path):
-    if re.search(RUBY_UNIT_FOLDER, path):
-      return '_test.rb'
-    if re.search(RSPEC_UNIT_FOLDER, path):
-      return '_spec.rb'
-    if re.search(CUCUMBER_UNIT_FOLDER, path):
-      return '.feature'
+    if re.search(MIX_TEST_FOLDER, path):
+      return '_test.exs'
 
   def file_name_input(self, file_name):
       full_path = os.path.join(self.selected_dir, file_name)
@@ -557,9 +388,11 @@ class GenerateTestFile:
               self.create_folder(parent)
           os.mkdir(base)
 
+
 class GenerateFile(sublime_plugin.WindowCommand):
   def run(self):
     GenerateNewFile(self.window).doIt()
+
 
 class GenerateNewFile(GenerateTestFile):
   def __init__(self, window):
