@@ -27,7 +27,7 @@ Settings
 
 'Sublime Text' -> 'Preferences' -> 'Package Settings' -> 'ElixirTest'
 
-Make a copy of `ElixirTest.sublime-settings` file to `~/Library/Application\ Support/Sublime\ Text\ X/Packages/User/` and make your changes.
+Make a copy of `ElixirTest.sublime-settings` file to `~/Library/Application\ Support/Sublime\ Text\ 2/Packages/User/` and make your changes.
 
 
 Usage
