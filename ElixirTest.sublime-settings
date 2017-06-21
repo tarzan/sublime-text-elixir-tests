@@ -1,6 +1,6 @@
 {
-  "run_mix_command": "mix {relative_path}",
-  "run_single_mix_command": "mix {relative_path}:{line_number}",
+  "run_mix_command": "mix test {relative_path}",
+  "run_single_mix_command": "mix test {relative_path}:{line_number}",
 
   "mix_test_folder": "test",
 
