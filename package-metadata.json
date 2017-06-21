@@ -1,7 +1,0 @@
-{
-  "url": "https://github.com/tarzan/sublime-text-elixir-tests",
-  "version": "1.0.0",
-  "description": "Sublime Text plugin for running Elixir tests! (mix)",
-  "author": "Maarten Jacobs",
-  "homepage": "https://github.com/tarzan/sublime-text-elixir-tests"
-}
