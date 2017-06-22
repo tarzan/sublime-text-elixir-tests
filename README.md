@@ -1,6 +1,13 @@
 Sublime Text Elixir Tests
 =========================
 
+DISCLAIMER
+----------
+I shamelessly copied the excellent Sublime Plugin (RubyTest)[https://github.com/maltize/sublime-text-2-ruby-tests] and just modified it so it would run `mix` instead of `rspec` and detect Elixir files instead of Ruby ones. So all credit goes to these guys:
+* Maciej Gajek (https://github.com/maltize)
+* Grzegorz Smajdor (https://github.com/gs)
+* Tejas Dinkar (https://github.com/gja)
+
 Overview
 --------
 Running:
@@ -43,6 +50,9 @@ Usage
 Keys:
  'Command' (OSX)
  'Ctrl' (Linux / Windows)
+
+ ![elixir_tests screenshot](https://github.com/tarzan/sublime-text-elixir-tests/raw/master/elixir_tests.png)
+
 
 Settings:
 ---------
