@@ -17,7 +17,7 @@
 
   { "keys": ["super+shift+x"], "command": "show_test_panel" }, // show test panel
 
-  { "keys": ["super+period"],
+  { "keys": ["super+."],
       "command": "switch_between_code_and_test",
       "args": {"split_view": false},
       "context": [ { "key": "selector", "operator": "equal",
@@ -25,7 +25,7 @@
                } ]
   }, // switch between code and test in single mode
 
-  { "keys": ["super+ctrl+period"],
+  { "keys": ["super+ctrl+."],
       "command": "switch_between_code_and_test",
       "args": {"split_view": true},
       "context": [ { "key": "selector", "operator": "equal",
