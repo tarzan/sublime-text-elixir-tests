@@ -176,7 +176,7 @@ class BaseMixTask(sublime_plugin.TextCommand):
       True
 
   class ElixirFile(BaseFile):
-    def possible_alternate_files(self): return [self.file_name.replace(".ex", "_test.exs"), self.file_name.replace(".exs", "_test.exs"), "test_" + self.file_name]
+    def possible_alternate_files(self): return [self.file_name.replace(".ex", "_test.exs"), "test_" + self.file_name]
     def features(self): return ["switch_to_test"]
 
   class TestFile(ElixirFile):
@@ -203,7 +203,9 @@ class BaseMixTask(sublime_plugin.TextCommand):
     if re.search('\w+\_test.exs', file_name):
       partition_folder = self.find_partition_folder(file_name, MIX_TEST_FOLDER)
       return BaseMixTask.TestFile(file_name, partition_folder)
-    elif re.search('\w+\.ex?', file_name):
+    elif re.search('\w+\.ex', file_name):
+      return BaseMixTask.ElixirFile(file_name)
+    elif re.search('\w+\.exs', file_name):
       return BaseMixTask.ElixirFile(file_name)
     else:
       return BaseMixTask.BaseFile(file_name)
