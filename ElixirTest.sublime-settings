@@ -14,7 +14,7 @@
   "before_callback": "",
   "after_callback": "",
 
-  "theme": "Packages/ElixirTest/TestConsole.hidden-tmTheme",
+  "theme": "Packages/ElixirTest/TestConsole-spacegrey-eighties.tmTheme",
   "syntax": "Packages/ElixirTest/TestConsole.tmLanguage",
 
   "terminal_encoding": "utf-8"
