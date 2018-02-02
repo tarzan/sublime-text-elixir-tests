@@ -91,7 +91,7 @@ class BaseMixTask(sublime_plugin.TextCommand):
       "cmd": command,
       "shell": True,
       "working_dir": working_dir,
-      "file_regex": r"([^ ]*\.ex?):?(\d*)",
+      "file_regex": r"([^ ]*\.exs?):(\d*):",
       "encoding": TERMINAL_ENCODING
     })
     self.display_results()
