@@ -73,8 +73,8 @@ Settings:
       "before_callback": "",
       "after_callback": "",
 
-      "theme": "Packages/RubyTest/TestConsole.hidden-tmTheme",
-      "syntax": "Packages/RubyTest/TestConsole.tmLanguage",
+      "theme": "Packages/ElixirTest/TestConsole-belafonte-night.tmTheme",
+      "syntax": "Packages/ElixirTest/TestConsole.tmLanguage",
 
       "terminal_encoding": "utf-8"
     }
