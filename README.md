@@ -48,9 +48,9 @@ Make a copy of `ElixirTest.sublime-settings` file to `~/Library/Application\ Sup
 Usage
 -----
 
- - Run single elixir test: `Command-Shift-R`
- - Run all elixir tests from current file: `Command-Shift-T`
- - Run last elixir test(s): `Command-Shift-E`
+ - Run single elixir test: `Ctrl-Command-Shift-R`
+ - Run all elixir tests from current file: `Ctrl-Command-Shift-T`
+ - Run last elixir test(s): `Ctrl-Command-Shift-E`
  - Show test panel: `Command-Shift-X` (when test panel visible hit `esc` to hide it)
  - Switching between code and test (create a file if not found):
     - Single View: `Command-.`

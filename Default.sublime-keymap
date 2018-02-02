@@ -1,20 +1,15 @@
 [
-  { "keys": ["super+shift+r"], "command": "run_single_elixir_test",
+  { "keys": ["ctrl+super+shift+r"], "command": "run_single_elixir_test",
     "context": [ { "key": "selector", "operator": "equal",
                    "operand": "source.elixir, source.rspec, text.gherkin.feature"
                } ]
   }, // single test
-
-
-  { "keys": ["super+shift+t"], "command": "run_all_elixir_test",
+  { "keys": ["ctrl+super+shift+t"], "command": "run_all_elixir_test",
       "context": [ { "key": "selector", "operator": "equal",
 		     "operand": "source.elixir, source.rspec, text.gherkin.feature"
                 } ]
   }, // test file
-
-
-  { "keys": ["super+shift+e"], "command": "run_last_elixir_test" }, // test last test file
-
+  { "keys": ["ctrl+super+shift+e"], "command": "run_last_elixir_test" }, // test last test file
   { "keys": ["super+shift+x"], "command": "show_test_panel" }, // show test panel
 
   { "keys": ["super+."],
