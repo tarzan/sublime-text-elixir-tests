@@ -14,8 +14,8 @@
   "before_callback": "",
   "after_callback": "",
 
-  "theme": "Packages/RubyTest/TestConsole.hidden-tmTheme",
-  "syntax": "Packages/RubyTest/TestConsole.tmLanguage",
+  "theme": "Packages/ElixirTest/TestConsole-spacegrey-eighties.tmTheme",
+  "syntax": "Packages/ElixirTest/TestConsole.tmLanguage",
 
   "terminal_encoding": "utf-8"
 }

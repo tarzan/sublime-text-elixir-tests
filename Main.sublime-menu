@@ -52,19 +52,19 @@
         "id":"package-settings",
         "children":[
           {
-            "caption":"elixirTest",
+            "caption":"ElixirTest",
             "children":[
               {
                 "command":"open_file",
                 "args":{
-                  "file":"${packages}/elixirTest/elixirTest.sublime-settings"
+                  "file":"${packages}/ElixirTest/ElixirTest.sublime-settings"
                 },
                 "caption":"Settings – Default"
               },
               {
                 "command":"open_file",
                 "args":{
-                  "file":"${packages}/User/elixirTest.sublime-settings"
+                  "file":"${packages}/User/ElixirTest.sublime-settings"
                 },
                 "caption":"Settings – User"
               },
@@ -74,14 +74,14 @@
               {
                 "command":"open_file",
                 "args":{
-                  "file":"${packages}/elixirTest/Default.sublime-keymap"
+                  "file":"${packages}/ElixirTest/Default.sublime-keymap"
                 },
                 "caption":"Key Bindings – Default"
               },
               {
                 "command":"open_file",
                 "args":{
-                  "file":"${packages}/elixirTest/Default (Windows).sublime-keymap",
+                  "file":"${packages}/ElixirTest/Default.sublime-keymap",
                   "platform":"Windows"
                 },
                 "caption":"Key Bindings – User"
@@ -89,7 +89,7 @@
               {
                 "command":"open_file",
                 "args":{
-                  "file":"${packages}/elixirTest/Default (OSX).sublime-keymap",
+                  "file":"${packages}/ElixirTest/Default.sublime-keymap",
                   "platform":"OSX"
                 },
                 "caption":"Key Bindings – User"
@@ -97,7 +97,7 @@
               {
                 "command":"open_file",
                 "args":{
-                  "file":"${packages}/elixirTest/Default (Linux).sublime-keymap",
+                  "file":"${packages}/ElixirTest/Default.sublime-keymap",
                   "platform":"Linux"
                 },
                 "caption":"Key Bindings – User"
