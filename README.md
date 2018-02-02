@@ -8,6 +8,14 @@ I shamelessly copied the excellent Sublime Plugin (RubyTest)[https://github.com/
 * Grzegorz Smajdor (https://github.com/gs)
 * Tejas Dinkar (https://github.com/gja)
 
+CONTRIBUTORS
+------------
+Thanks go out to:
+* Matt (https://github.com/molenick)
+* CJ Bryan (https://github.com/waltz)
+
+for bugfixing and tweaking this thing :)
+
 Overview
 --------
 Running:
